@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.totem.iot.dao.IotUserServiceRelationDao">
+    <resultMap id="iotUserServiceRelation" type="org.totem.iot.model.IotUserServiceRelation">
+        <id column="IOT_USR_ID" property="iotUserServiceRelationId" ></id>
+        <result column="USER_ID" property="userId"  jdbcType="VARCHAR"></result>
+        <result column="SERVICE_ID" property="serviceId"  jdbcType="VARCHAR"></result>
+        <result column="SERVICE_DESCRIPTION" property="serviceDescription"  jdbcType="VARCHAR"></result>
+        <result column="I0_USER_NAME_Show" property="userIdShowLabel" jdbcType="VARCHAR"></result>
+        <result column="U1_SERVICE_NAME_Show" property="serviceIdShowLabel" jdbcType="VARCHAR"></result>
+
+    </resultMap>
+
+    <sql id="IotUserServiceRelation_column">
+        I0.USER_NAME I0_USER_NAME_Show,
+        U1.SERVICE_NAME U1_SERVICE_NAME_Show,
+
+        A.IOT_USR_ID,A.USER_ID,A.SERVICE_ID,A.SERVICE_DESCRIPTION
+    </sql>
+
+    <sql id="IotUserServiceRelation_clean_column">
+
+    A.IOT_USR_ID,A.USER_ID,A.SERVICE_ID,A.SERVICE_DESCRIPTION
+    </sql>
+
+    <!-- 生成时选择的可能查询的条件 -->
+    <sql id="whereCondition">
+        <where>
+            <if test="remoteParameter != null and remoteParameter !=''">
+                ( A.IOT_USR_ID = #{remoteParameter}
+                )
+            </if>
+            <if test="(iotUser_userNameLIK != null and iotUser_userNameLIK !='') or (iotUser_userEmailLIK != null and iotUser_userEmailLIK !='')">
+                AND exists (select IOT_USER_ID from IOT_USER
+                <where>
+                    A.USER_ID = IOT_USER_ID
+                    <if test="iotUser_userNameLIK != null and iotUser_userNameLIK !=''">
+                        AND USER_NAME 	LIKE CONCAT('%',#{iotUser_userNameLIK},'%')
+
+                    </if>
+                    <if test="iotUser_userEmailLIK != null and iotUser_userEmailLIK !=''">
+                        AND USER_EMAIL 	LIKE CONCAT('%',#{iotUser_userEmailLIK},'%')
+
+                    </if>
+                </where>)
+            </if>
+            <if test="(userService_serviceName != null and userService_serviceName !='') or (userService_serviceId != null and userService_serviceId !='')">
+                AND exists (select SERVICE_ID from USER_SERVICE
+                <where>
+                    A.SERVICE_ID = SERVICE_ID
+                    <if test="userService_serviceName != null and userService_serviceName !=''">
+                        AND SERVICE_NAME 	= #{userService_serviceName}
+                    </if>
+                    <if test="userService_serviceId != null and userService_serviceId !=''">
+                        AND SERVICE_ID 	= #{userService_serviceId}
+                    </if>
+                </where>)
+            </if>
+            <if test="iotUserServiceRelationId != null and iotUserServiceRelationId !=''">
+                AND A.IOT_USR_ID = #{iotUserServiceRelationId}
+            </if>
+            <if test="noIotUserServiceRelationId != null and noIotUserServiceRelationId !=''">
+                AND A.IOT_USR_ID != #{noIotUserServiceRelationId}
+            </if>
+            <if test="iotUserServiceRelationIds != null and iotUserServiceRelationIds !=''">
+                AND A.IOT_USR_ID in
+                <foreach item="item" index="index" collection="iotUserServiceRelationIds" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="noIotUserServiceRelationIds != null and noIotUserServiceRelationIds !=''">
+                AND A.IOT_USR_ID not in
+                <foreach item="item" index="index" collection="noIotUserServiceRelationIds" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="userId != null and userId !=''">
+                AND A.USER_ID = #{userId}
+            </if>
+            <if test="noUserId != null and noUserId !=''">
+                AND A.USER_ID != #{noUserId}
+            </if>
+            <if test="userIds != null and userIds !=''">
+                AND A.USER_ID in
+                <foreach item="item" index="index" collection="userIds" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="noUserIds != null and noUserIds !=''">
+                AND A.USER_ID not in
+                <foreach item="item" index="index" collection="noUserIds" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="serviceId != null and serviceId !=''">
+                AND A.SERVICE_ID = #{serviceId}
+            </if>
+            <if test="noServiceId != null and noServiceId !=''">
+                AND A.SERVICE_ID != #{noServiceId}
+            </if>
+            <if test="serviceIds != null and serviceIds !=''">
+                AND A.SERVICE_ID in
+                <foreach item="item" index="index" collection="serviceIds" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="noServiceIds != null and noServiceIds !=''">
+                AND A.SERVICE_ID not in
+                <foreach item="item" index="index" collection="noServiceIds" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="serviceDescription != null and serviceDescription !=''">
+                AND A.SERVICE_DESCRIPTION = #{serviceDescription}
+            </if>
+            <if test="noServiceDescription != null and noServiceDescription !=''">
+                AND A.SERVICE_DESCRIPTION != #{noServiceDescription}
+            </if>
+            <if test="serviceDescriptions != null and serviceDescriptions !=''">
+                AND A.SERVICE_DESCRIPTION in
+                <foreach item="item" index="index" collection="serviceDescriptions" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="noServiceDescriptions != null and noServiceDescriptions !=''">
+                AND A.SERVICE_DESCRIPTION not in
+                <foreach item="item" index="index" collection="noServiceDescriptions" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        <if test="groupBy != null and groupBy !=''">
+            group by  ${groupBy}
+        </if>
+        <if test="orderBy != null and orderBy !=''">
+            order by  ${orderBy}
+        </if>
+    </sql>
+
+    <insert id="addIotUserServiceRelation" parameterType="org.totem.iot.model.IotUserServiceRelation">
+        insert into IOT_USER_SERVICE_RELATION (
+            `IOT_USR_ID`,`USER_ID`,`SERVICE_ID`,`SERVICE_DESCRIPTION`
+        ) values (
+            #{iotUserServiceRelationId,	jdbcType=VARCHAR},#{userId,	jdbcType=VARCHAR},#{serviceId,	jdbcType=VARCHAR},#{serviceDescription,	jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="addIotUserServiceRelations" useGeneratedKeys="true" parameterType="java.util.List">
+        insert into IOT_USER_SERVICE_RELATION (
+            `IOT_USR_ID`,`USER_ID`,`SERVICE_ID`,`SERVICE_DESCRIPTION`
+        ) values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.iotUserServiceRelationId,	jdbcType=VARCHAR},#{item.userId,	jdbcType=VARCHAR},#{item.serviceId,	jdbcType=VARCHAR},#{item.serviceDescription,	jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+    <delete id="deleteIotUserServiceRelations" parameterType="map">
+        delete A from IOT_USER_SERVICE_RELATION A
+        <include refid="whereCondition"/>
+    </delete>
+
+    <delete id="deleteIotUserServiceRelation" parameterType="String">
+        delete from IOT_USER_SERVICE_RELATION
+        where IOT_USR_ID =  #{iotUserServiceRelationId}
+    </delete>
+
+    <update id="updateIotUserServiceRelation" parameterType="org.totem.iot.model.IotUserServiceRelation">
+        update IOT_USER_SERVICE_RELATION
+        <set>
+            <if test="userId != null">
+                `USER_ID` = #{userId} ,
+            </if>
+            <if test="serviceId != null">
+                `SERVICE_ID` = #{serviceId} ,
+            </if>
+            <if test="serviceDescription != null">
+                `SERVICE_DESCRIPTION` = #{serviceDescription}
+            </if>
+        </set>
+        where `IOT_USR_ID` =  #{iotUserServiceRelationId}
+    </update>
+
+    <select id="queryIotUserServiceRelations" parameterType="Map" resultMap="iotUserServiceRelation">
+        select distinct <include refid="IotUserServiceRelation_column"/>
+        from IOT_USER_SERVICE_RELATION A
+        left outer join IOT_USER  I0 on A.USER_ID = I0.IOT_USER_ID
+        left outer join USER_SERVICE  U1 on A.SERVICE_ID = U1.SERVICE_ID
+
+        <include refid="whereCondition"/>
+    </select>
+
+    <select id="queryByQueryStr" parameterType="java.lang.String" resultMap="iotUserServiceRelation">
+        select distinct <include refid="IotUserServiceRelation_clean_column"/>
+        from IOT_USER_SERVICE_RELATION A
+        where ${_parameter}
+    </select>
+
+    <select id="getById" parameterType="String" resultMap="iotUserServiceRelation">
+        select <include refid="IotUserServiceRelation_column"/>
+        from IOT_USER_SERVICE_RELATION A
+        left outer join IOT_USER  I0 on A.USER_ID = I0.IOT_USER_ID
+        left outer join USER_SERVICE  U1 on A.SERVICE_ID = U1.SERVICE_ID
+
+        where  A.IOT_USR_ID =  #{iotUserServiceRelationId}
+    </select>
+
+    <select id="getCounts" parameterType="Map" resultType="int">
+        select count(1) from IOT_USER_SERVICE_RELATION A
+        <include refid="whereCondition"/>
+    </select>
+
+</mapper>

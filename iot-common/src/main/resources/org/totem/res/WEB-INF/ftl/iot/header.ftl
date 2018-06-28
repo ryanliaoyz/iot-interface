@@ -1,0 +1,1 @@
+<script type="text/javascript" src="${appsite}assets/js/iot/iot.js?${.now?date}"></script>

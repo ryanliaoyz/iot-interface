@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <name>iot-common</name>
+    <artifactId>iot-common</artifactId>
+    <groupId>org.totem.modules</groupId>
+    <modelVersion>4.0.0</modelVersion>
+    <version>1.0.0-SNAPSHOT</version>
+    <properties>
+        <totem-common.version>3.1.0-SNAPSHOT</totem-common.version>
+    </properties>
+    <parent>
+        <groupId>org.totem</groupId>
+        <artifactId>totem-root</artifactId>
+        <version>2.0-SNAPSHOT</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.totem.components</groupId>
+            <artifactId>totem.common</artifactId>
+            <version>${totem-common.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.totem.components</groupId>
+            <artifactId>components-mail</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+    </dependencies>
+    </project>

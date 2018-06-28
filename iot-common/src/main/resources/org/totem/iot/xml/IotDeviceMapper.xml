@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.totem.iot.dao.IotDeviceDao">
+    <resultMap id="iotDevice" type="org.totem.iot.model.IotDevice">
+        <id column="DEVICE_ID" property="deviceId" ></id>
+        <result column="DEVICE_MANUFA" property="deviceManufa"  jdbcType="VARCHAR"></result>
+        <result column="DEVICE_TYPE" property="deviceType"  jdbcType="VARCHAR"></result>
+        <result column="DEVICE_SERVICE" property="deviceService"  jdbcType="VARCHAR"></result>
+        <result column="DEVICE_NAME" property="deviceName"  jdbcType="VARCHAR"></result>
+        <result column="DEVICE_BELONGING" property="deviceBelonging"  jdbcType="VARCHAR"></result>
+        <result column="S1_CODE_LABEL_Show" property="deviceTypeShowLabel" jdbcType="VARCHAR"></result>
+        <result column="S2_CODE_LABEL_Show" property="deviceServiceShowLabel" jdbcType="VARCHAR"></result>
+        <result column="I4_USER_NAME_Show" property="deviceBelongingShowLabel" jdbcType="VARCHAR"></result>
+
+    </resultMap>
+
+    <sql id="IotDevice_column">
+        S1.CODE_LABEL S1_CODE_LABEL_Show,
+        S2.CODE_LABEL S2_CODE_LABEL_Show,
+        I4.USER_NAME I4_USER_NAME_Show,
+
+        A.DEVICE_ID,A.DEVICE_MANUFA,A.DEVICE_TYPE,A.DEVICE_SERVICE,A.DEVICE_NAME,A.DEVICE_BELONGING
+    </sql>
+
+    <sql id="IotDevice_clean_column">
+
+    A.DEVICE_ID,A.DEVICE_MANUFA,A.DEVICE_TYPE,A.DEVICE_SERVICE,A.DEVICE_NAME,A.DEVICE_BELONGING
+    </sql>
+
+    <!-- 生成时选择的可能查询的条件 -->
+    <sql id="whereCondition">
+        <where>
+            <if test="remoteParameter != null and remoteParameter !=''">
+                ( A.DEVICE_ID = #{remoteParameter}
+                OR A.DEVICE_MANUFA = #{remoteParameter}
+                OR A.DEVICE_TYPE = #{remoteParameter}
+                OR A.DEVICE_NAME = #{remoteParameter}
+                )
+            </if>
+            <if test="(iotUser_userNameLIK != null and iotUser_userNameLIK !='') or (iotUser_userEmailLIK != null and iotUser_userEmailLIK !='')">
+                AND exists (select IOT_USER_ID from IOT_USER
+                <where>
+                    A.DEVICE_BELONGING = IOT_USER_ID
+                    <if test="iotUser_userNameLIK != null and iotUser_userNameLIK !=''">
+                        AND USER_NAME 	LIKE CONCAT('%',#{iotUser_userNameLIK},'%')
+
+                    </if>
+                    <if test="iotUser_userEmailLIK != null and iotUser_userEmailLIK !=''">
+                        AND USER_EMAIL 	LIKE CONCAT('%',#{iotUser_userEmailLIK},'%')
+
+                    </if>
+                </where>)
+            </if>
+            <if test="deviceId != null and deviceId !=''">
+                AND A.DEVICE_ID = #{deviceId}
+            </if>
+            <if test="noDeviceId != null and noDeviceId !=''">
+                AND A.DEVICE_ID != #{noDeviceId}
+            </if>
+            <if test="deviceIds != null and deviceIds !=''">
+                AND A.DEVICE_ID in
+                <foreach item="item" index="index" collection="deviceIds" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="noDeviceIds != null and noDeviceIds !=''">
+                AND A.DEVICE_ID not in
+                <foreach item="item" index="index" collection="noDeviceIds" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="deviceManufa != null and deviceManufa !=''">
+                AND A.DEVICE_MANUFA = #{deviceManufa}
+            </if>
+            <if test="noDeviceManufa != null and noDeviceManufa !=''">
+                AND A.DEVICE_MANUFA != #{noDeviceManufa}
+            </if>
+            <if test="deviceManufas != null and deviceManufas !=''">
+                AND A.DEVICE_MANUFA in
+                <foreach item="item" index="index" collection="deviceManufas" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="noDeviceManufas != null and noDeviceManufas !=''">
+                AND A.DEVICE_MANUFA not in
+                <foreach item="item" index="index" collection="noDeviceManufas" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="deviceType != null and deviceType !=''">
+                AND A.DEVICE_TYPE = #{deviceType}
+            </if>
+            <if test="noDeviceType != null and noDeviceType !=''">
+                AND A.DEVICE_TYPE != #{noDeviceType}
+            </if>
+            <if test="deviceTypes != null and deviceTypes !=''">
+                AND A.DEVICE_TYPE in
+                <foreach item="item" index="index" collection="deviceTypes" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="noDeviceTypes != null and noDeviceTypes !=''">
+                AND A.DEVICE_TYPE not in
+                <foreach item="item" index="index" collection="noDeviceTypes" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="deviceService != null and deviceService !=''">
+                AND A.DEVICE_SERVICE = #{deviceService}
+            </if>
+            <if test="noDeviceService != null and noDeviceService !=''">
+                AND A.DEVICE_SERVICE != #{noDeviceService}
+            </if>
+            <if test="deviceServices != null and deviceServices !=''">
+                AND A.DEVICE_SERVICE in
+                <foreach item="item" index="index" collection="deviceServices" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="noDeviceServices != null and noDeviceServices !=''">
+                AND A.DEVICE_SERVICE not in
+                <foreach item="item" index="index" collection="noDeviceServices" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="deviceName != null and deviceName !=''">
+                AND A.DEVICE_NAME = #{deviceName}
+            </if>
+            <if test="noDeviceName != null and noDeviceName !=''">
+                AND A.DEVICE_NAME != #{noDeviceName}
+            </if>
+            <if test="deviceNames != null and deviceNames !=''">
+                AND A.DEVICE_NAME in
+                <foreach item="item" index="index" collection="deviceNames" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="noDeviceNames != null and noDeviceNames !=''">
+                AND A.DEVICE_NAME not in
+                <foreach item="item" index="index" collection="noDeviceNames" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="deviceBelonging != null and deviceBelonging !=''">
+                AND A.DEVICE_BELONGING = #{deviceBelonging}
+            </if>
+            <if test="noDeviceBelonging != null and noDeviceBelonging !=''">
+                AND A.DEVICE_BELONGING != #{noDeviceBelonging}
+            </if>
+            <if test="deviceBelongings != null and deviceBelongings !=''">
+                AND A.DEVICE_BELONGING in
+                <foreach item="item" index="index" collection="deviceBelongings" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="noDeviceBelongings != null and noDeviceBelongings !=''">
+                AND A.DEVICE_BELONGING not in
+                <foreach item="item" index="index" collection="noDeviceBelongings" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        <if test="groupBy != null and groupBy !=''">
+            group by  ${groupBy}
+        </if>
+        <if test="orderBy != null and orderBy !=''">
+            order by  ${orderBy}
+        </if>
+    </sql>
+
+    <insert id="addIotDevice" parameterType="org.totem.iot.model.IotDevice">
+        insert into IOT_DEVICE (
+            `DEVICE_ID`,`DEVICE_MANUFA`,`DEVICE_TYPE`,`DEVICE_SERVICE`,`DEVICE_NAME`,`DEVICE_BELONGING`
+        ) values (
+            #{deviceId,	jdbcType=VARCHAR},#{deviceManufa,	jdbcType=VARCHAR},#{deviceType,	jdbcType=VARCHAR},#{deviceService,	jdbcType=VARCHAR},#{deviceName,	jdbcType=VARCHAR},#{deviceBelonging,	jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="addIotDevices" useGeneratedKeys="true" parameterType="java.util.List">
+        insert into IOT_DEVICE (
+            `DEVICE_ID`,`DEVICE_MANUFA`,`DEVICE_TYPE`,`DEVICE_SERVICE`,`DEVICE_NAME`,`DEVICE_BELONGING`
+        ) values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.deviceId,	jdbcType=VARCHAR},#{item.deviceManufa,	jdbcType=VARCHAR},#{item.deviceType,	jdbcType=VARCHAR},#{item.deviceService,	jdbcType=VARCHAR},#{item.deviceName,	jdbcType=VARCHAR},#{item.deviceBelonging,	jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+    <delete id="deleteIotDevices" parameterType="map">
+        delete A from IOT_DEVICE A
+        <include refid="whereCondition"/>
+    </delete>
+
+    <delete id="deleteIotDevice" parameterType="String">
+        delete from IOT_DEVICE
+        where DEVICE_ID =  #{deviceId}
+    </delete>
+
+    <update id="updateIotDevice" parameterType="org.totem.iot.model.IotDevice">
+        update IOT_DEVICE
+        <set>
+            <if test="deviceManufa != null">
+                `DEVICE_MANUFA` = #{deviceManufa} ,
+            </if>
+            <if test="deviceType != null">
+                `DEVICE_TYPE` = #{deviceType} ,
+            </if>
+            <if test="deviceService != null">
+                `DEVICE_SERVICE` = #{deviceService} ,
+            </if>
+            <if test="deviceName != null">
+                `DEVICE_NAME` = #{deviceName} ,
+            </if>
+            <if test="deviceBelonging != null">
+                `DEVICE_BELONGING` = #{deviceBelonging}
+            </if>
+        </set>
+        where `DEVICE_ID` =  #{deviceId}
+    </update>
+
+    <select id="queryIotDevices" parameterType="Map" resultMap="iotDevice">
+        select distinct <include refid="IotDevice_column"/>
+        from IOT_DEVICE A
+        left outer join SYS_TYPE_CODE  S1 on A.DEVICE_TYPE = S1.CODE_VALUE and S1.TYPE_CODE='deviceType'
+        left outer join SYS_TYPE_CODE  S2 on A.DEVICE_SERVICE = S2.CODE_VALUE and S2.TYPE_CODE='deviceService'
+        left outer join IOT_USER  I4 on A.DEVICE_BELONGING = I4.IOT_USER_ID
+
+        <include refid="whereCondition"/>
+    </select>
+
+    <select id="queryByQueryStr" parameterType="java.lang.String" resultMap="iotDevice">
+        select distinct <include refid="IotDevice_clean_column"/>
+        from IOT_DEVICE A
+        where ${_parameter}
+    </select>
+
+    <select id="getById" parameterType="String" resultMap="iotDevice">
+        select <include refid="IotDevice_column"/>
+        from IOT_DEVICE A
+        left outer join SYS_TYPE_CODE  S1 on A.DEVICE_TYPE = S1.CODE_VALUE and S1.TYPE_CODE='deviceType'
+        left outer join SYS_TYPE_CODE  S2 on A.DEVICE_SERVICE = S2.CODE_VALUE and S2.TYPE_CODE='deviceService'
+        left outer join IOT_USER  I4 on A.DEVICE_BELONGING = I4.IOT_USER_ID
+
+        where  A.DEVICE_ID =  #{deviceId}
+    </select>
+
+    <select id="getCounts" parameterType="Map" resultType="int">
+        select count(1) from IOT_DEVICE A
+        <include refid="whereCondition"/>
+    </select>
+
+</mapper>

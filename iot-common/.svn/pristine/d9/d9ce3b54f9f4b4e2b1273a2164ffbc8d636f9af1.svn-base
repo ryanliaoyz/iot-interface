@@ -1,0 +1,128 @@
+package org.totem.iot.action;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+import org.totem.common.utils.AuthorityUtil;
+import org.totem.components.data.DateUtils;
+import org.totem.iot.action.CommonController;
+import org.totem.iot.model.*;
+import org.totem.iot.service.*;
+import org.totem.iot.utils.CommonsUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Controller
+@RequestMapping("/iot")
+public class IotController {
+    @Autowired
+    private IotService iotService;
+    @Autowired
+    private IotUserService iotUserService;
+
+    @ResponseBody
+    @RequestMapping(value = "/iot")
+    public Object iot(HttpServletRequest request, HttpServletResponse response, Model m) {
+        return "OK";
+    }
+
+    @SuppressWarnings("unchecked")
+    @ResponseBody
+    @RequestMapping(value = "userlogin")
+    public ModelAndView userLogin(HttpServletRequest request, HttpServletResponse response, Model m) {
+         return new ModelAndView("userlogin");
+    }
+
+    @SuppressWarnings("unchecked")
+    @ResponseBody
+    @RequestMapping(value = "usersignup")
+    public ModelAndView usersignup(HttpServletRequest request, HttpServletResponse response, Model m) {
+        return new ModelAndView("usersignup");
+    }
+
+    @SuppressWarnings("unchecked")
+    @ResponseBody
+    @RequestMapping(value = "/usersignupsuc")
+    public ModelAndView usersignupsuc(HttpServletRequest request, HttpServletResponse response, Model m) {
+        return new ModelAndView("usersignupsuc");
+    }
+
+
+    @SuppressWarnings("unchecked")
+    @ResponseBody
+    @RequestMapping(value = "/signup")
+    public ModelAndView signup(HttpServletRequest request, HttpServletResponse response, Model m) {
+        Map<String,Object> map = CommonsUtil.request2map(request);
+        m.addAllAttributes(map);
+        Map<String, Object> map2 = new HashMap<>();
+        String userName = (String) map.get("userName");
+        map2.put("userName", userName);
+        map2.put("userValid", "");
+        if (StringUtils.isNotBlank(userName)){
+            List< IotUser> dataList = iotUserService.queryIotUsers(map2);
+            if (!dataList.isEmpty()){
+                m.addAttribute("userNameError", "The Username already exist.");
+                return new ModelAndView("usersignup");
+            }
+        }
+
+        map2.remove("userName");
+        String userEmail = (String) map.get("userEmail");
+        map2.put("userEmail", userEmail);
+        if (StringUtils.isNotBlank(userEmail)){
+            List< IotUser> dataList = iotUserService.queryIotUsers(map2);
+            if (!dataList.isEmpty()){
+                m.addAttribute("userEmailError", "The e-mail address already exist.");
+                return new ModelAndView("usersignup");
+            }
+        }
+        else {
+            m.addAttribute("userEmailError", "");
+            return new ModelAndView("usersignup");
+        }
+        String userPassword = (String) map.get("userPassword");
+
+        IotUser newUser = new IotUser();
+        newUser.setUserName(userName);
+        newUser.setUserEmail(userEmail);
+        newUser.setUserPassword(userPassword);
+        newUser.setUserValid("0");
+        iotUserService.updateIotUser(newUser);
+
+
+        m.addAttribute("userEmailRequest", userEmail);
+        return new ModelAndView("signupSuc");
+    }
+
+
+
+    @ResponseBody
+    @RequestMapping(value = "/login")
+    public Object login(HttpServletRequest request, HttpServletResponse response, Model m) {
+        Map<String,Object> map = CommonsUtil.request2map(request);
+        try {
+            List< IotUser> dataList = iotUserService.queryIotUsers(map);
+            if (dataList.size() == 1) {
+                response.sendRedirect("/home");
+            }
+            else {
+                response.sendRedirect("userlogin");
+            }
+            map.put("rows",dataList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return map;
+    }
+
+}

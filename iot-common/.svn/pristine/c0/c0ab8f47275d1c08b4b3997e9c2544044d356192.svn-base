@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.totem.iot.dao.UserServiceDao">
+    <resultMap id="userService" type="org.totem.iot.model.UserService">
+        <id column="SERVICE_ID" property="serviceId" ></id>
+        <result column="SERVICE_NAME" property="serviceName"  jdbcType="VARCHAR"></result>
+        <result column="SERVICE_TYPE" property="serviceType"  jdbcType="VARCHAR"></result>
+        <result column="SERVICE_DESCRIPTION" property="serviceDescription"  jdbcType="VARCHAR"></result>
+
+    </resultMap>
+
+    <sql id="UserService_column">
+
+    A.SERVICE_ID,A.SERVICE_NAME,A.SERVICE_TYPE,A.SERVICE_DESCRIPTION
+    </sql>
+
+    <sql id="UserService_clean_column">
+
+    A.SERVICE_ID,A.SERVICE_NAME,A.SERVICE_TYPE,A.SERVICE_DESCRIPTION
+    </sql>
+
+    <!-- 生成时选择的可能查询的条件 -->
+    <sql id="whereCondition">
+        <where>
+            <if test="remoteParameter != null and remoteParameter !=''">
+                ( A.SERVICE_ID = #{remoteParameter}
+                OR A.SERVICE_NAME = #{remoteParameter}
+                OR A.SERVICE_ID = #{remoteParameter}
+                )
+            </if>
+            <if test="serviceId != null and serviceId !=''">
+                AND A.SERVICE_ID = #{serviceId}
+            </if>
+            <if test="noServiceId != null and noServiceId !=''">
+                AND A.SERVICE_ID != #{noServiceId}
+            </if>
+            <if test="serviceIds != null and serviceIds !=''">
+                AND A.SERVICE_ID in
+                <foreach item="item" index="index" collection="serviceIds" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="noServiceIds != null and noServiceIds !=''">
+                AND A.SERVICE_ID not in
+                <foreach item="item" index="index" collection="noServiceIds" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="serviceName != null and serviceName !=''">
+                AND A.SERVICE_NAME = #{serviceName}
+            </if>
+            <if test="noServiceName != null and noServiceName !=''">
+                AND A.SERVICE_NAME != #{noServiceName}
+            </if>
+            <if test="serviceNames != null and serviceNames !=''">
+                AND A.SERVICE_NAME in
+                <foreach item="item" index="index" collection="serviceNames" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="noServiceNames != null and noServiceNames !=''">
+                AND A.SERVICE_NAME not in
+                <foreach item="item" index="index" collection="noServiceNames" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="serviceType != null and serviceType !=''">
+                AND A.SERVICE_TYPE = #{serviceType}
+            </if>
+            <if test="noServiceType != null and noServiceType !=''">
+                AND A.SERVICE_TYPE != #{noServiceType}
+            </if>
+            <if test="serviceTypes != null and serviceTypes !=''">
+                AND A.SERVICE_TYPE in
+                <foreach item="item" index="index" collection="serviceTypes" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="noServiceTypes != null and noServiceTypes !=''">
+                AND A.SERVICE_TYPE not in
+                <foreach item="item" index="index" collection="noServiceTypes" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="serviceDescription != null and serviceDescription !=''">
+                AND A.SERVICE_DESCRIPTION = #{serviceDescription}
+            </if>
+            <if test="noServiceDescription != null and noServiceDescription !=''">
+                AND A.SERVICE_DESCRIPTION != #{noServiceDescription}
+            </if>
+            <if test="serviceDescriptions != null and serviceDescriptions !=''">
+                AND A.SERVICE_DESCRIPTION in
+                <foreach item="item" index="index" collection="serviceDescriptions" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="noServiceDescriptions != null and noServiceDescriptions !=''">
+                AND A.SERVICE_DESCRIPTION not in
+                <foreach item="item" index="index" collection="noServiceDescriptions" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="p_userId != null and p_userId !=''">
+                AND exists
+                (select SERVICE_ID from IOT_USER_SERVICE_RELATION
+                where A.SERVICE_ID = SERVICE_ID and  USER_ID = #{p_userId})
+            </if>
+            <if test="p_noUserId != null and p_noUserId !=''">
+                AND not exists
+                (select SERVICE_ID from IOT_USER_SERVICE_RELATION
+                where A.SERVICE_ID = SERVICE_ID and USER_ID = #{p_noUserId})
+            </if>
+            <if test="p_userIds != null and p_userIds !=''">
+                AND exists (select SERVICE_ID from IOT_USER_SERVICE_RELATION
+                where
+                A.SERVICE_ID = SERVICE_ID and (
+                    <foreach item="item" index="index" collection="p_userIds" open="(" close=")" separator="OR">
+                        USER_ID = #{item}
+                    </foreach>))
+            </if>
+            <if test="p_noUserIds != null and p_noUserIds !=''">
+                AND not exists (select SERVICE_ID from IOT_USER_SERVICE_RELATION
+                where
+                A.SERVICE_ID = SERVICE_ID and(
+                    <foreach item="item" index="index" collection="p_noUserIds" open="(" close=")" separator="OR">
+                        USER_ID = #{item}
+                    </foreach>))
+            </if>
+        </where>
+        <if test="groupBy != null and groupBy !=''">
+            group by  ${groupBy}
+        </if>
+        <if test="orderBy != null and orderBy !=''">
+            order by  ${orderBy}
+        </if>
+    </sql>
+
+    <insert id="addUserService" parameterType="org.totem.iot.model.UserService">
+        insert into USER_SERVICE (
+            `SERVICE_ID`,`SERVICE_NAME`,`SERVICE_TYPE`,`SERVICE_DESCRIPTION`
+        ) values (
+            #{serviceId,	jdbcType=VARCHAR},#{serviceName,	jdbcType=VARCHAR},#{serviceType,	jdbcType=VARCHAR},#{serviceDescription,	jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="addUserServices" useGeneratedKeys="true" parameterType="java.util.List">
+        insert into USER_SERVICE (
+            `SERVICE_ID`,`SERVICE_NAME`,`SERVICE_TYPE`,`SERVICE_DESCRIPTION`
+        ) values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.serviceId,	jdbcType=VARCHAR},#{item.serviceName,	jdbcType=VARCHAR},#{item.serviceType,	jdbcType=VARCHAR},#{item.serviceDescription,	jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+    <delete id="deleteUserServices" parameterType="map">
+        delete A from USER_SERVICE A
+        <include refid="whereCondition"/>
+    </delete>
+
+    <delete id="deleteUserService" parameterType="String">
+        delete from USER_SERVICE
+        where SERVICE_ID =  #{serviceId}
+    </delete>
+
+    <update id="updateUserService" parameterType="org.totem.iot.model.UserService">
+        update USER_SERVICE
+        <set>
+            <if test="serviceName != null">
+                `SERVICE_NAME` = #{serviceName} ,
+            </if>
+            <if test="serviceType != null">
+                `SERVICE_TYPE` = #{serviceType} ,
+            </if>
+            <if test="serviceDescription != null">
+                `SERVICE_DESCRIPTION` = #{serviceDescription}
+            </if>
+        </set>
+        where `SERVICE_ID` =  #{serviceId}
+    </update>
+
+    <select id="queryUserServices" parameterType="Map" resultMap="userService">
+        select distinct <include refid="UserService_column"/>
+        from USER_SERVICE A
+
+        <include refid="whereCondition"/>
+    </select>
+
+    <select id="queryByQueryStr" parameterType="java.lang.String" resultMap="userService">
+        select distinct <include refid="UserService_clean_column"/>
+        from USER_SERVICE A
+        where ${_parameter}
+    </select>
+
+    <select id="getById" parameterType="String" resultMap="userService">
+        select <include refid="UserService_column"/>
+        from USER_SERVICE A
+
+        where  A.SERVICE_ID =  #{serviceId}
+    </select>
+
+    <select id="getCounts" parameterType="Map" resultType="int">
+        select count(1) from USER_SERVICE A
+        <include refid="whereCondition"/>
+    </select>
+
+</mapper>

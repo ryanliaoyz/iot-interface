@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.totem.components:components-mail:1.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/totem/components/components-mail/1.0-SNAPSHOT/components-mail-1.0-20180510.071857-13.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/totem/components/components-mail/1.0-SNAPSHOT/components-mail-1.0-20180510.071857-13-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/totem/components/components-mail/1.0-SNAPSHOT/components-mail-1.0-20180510.071857-13-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

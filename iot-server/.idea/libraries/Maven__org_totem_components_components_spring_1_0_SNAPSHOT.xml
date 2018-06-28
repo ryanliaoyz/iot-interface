@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.totem.components:components-spring:1.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/totem/components/components-spring/1.0-SNAPSHOT/components-spring-1.0-20180510.071805-17.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/totem/components/components-spring/1.0-SNAPSHOT/components-spring-1.0-20180510.071805-17-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/totem/components/components-spring/1.0-SNAPSHOT/components-spring-1.0-20180510.071805-17-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

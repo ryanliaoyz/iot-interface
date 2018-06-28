@@ -1,0 +1,78 @@
+package org.totem.iot.model;
+
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.alibaba.fastjson.annotation.JSONField;
+/**
+* 模型: IotDevice
+* 表名: IOT_DEVICE
+* 描述:
+*/
+
+public class IotDevice extends org.totem.common.model.BaseModel{
+    /**
+    * 设备ID
+    */
+    private String deviceId;
+
+    /**
+    * 设备厂商
+    */
+    private String deviceManufa;
+
+    /**
+    * 设备类型
+    */
+    private String deviceType;
+
+    /**
+    * 设备服务
+    */
+    private String deviceService;
+
+    /**
+    * 设备名
+    */
+    private String deviceName;
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceManufa(String deviceManufa) {
+        this.deviceManufa = deviceManufa;
+    }
+
+    public String getDeviceManufa() {
+        return deviceManufa;
+    }
+
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
+    }
+
+    public String getDeviceType() {
+        return deviceType;
+    }
+
+    public void setDeviceService(String deviceService) {
+        this.deviceService = deviceService;
+    }
+
+    public String getDeviceService() {
+        return deviceService;
+    }
+
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
+    }
+
+    public String getDeviceName() {
+        return deviceName;
+    }
+
+}

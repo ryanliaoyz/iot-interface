@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.totem.iot.dao.IotUserDao">
+    <resultMap id="iotUser" type="org.totem.iot.model.IotUser">
+        <id column="IOT_USER_ID" property="iotUserId" ></id>
+        <result column="USER_NAME" property="userName"  jdbcType="VARCHAR"></result>
+        <result column="USER_PASSWORD" property="userPassword"  jdbcType="VARCHAR"></result>
+        <result column="USER_TOKEN" property="userToken"  jdbcType="VARCHAR"></result>
+        <result column="USER_EMAIL" property="userEmail"  jdbcType="VARCHAR"></result>
+        <result column="USER_DISPLAY_NAME" property="userDisplayName"  jdbcType="VARCHAR"></result>
+        <result column="USER_VALID" property="userValid"  jdbcType="VARCHAR"></result>
+        <result column="USER_DATE" property="userDate"  jdbcType="VARCHAR"></result>
+        <result column="USER_BALANCE" property="userBalance"  jdbcType="VARCHAR"></result>
+
+    </resultMap>
+
+    <sql id="IotUser_column">
+
+    A.IOT_USER_ID,A.USER_NAME,A.USER_PASSWORD,A.USER_TOKEN,A.USER_EMAIL,A.USER_DISPLAY_NAME,A.USER_VALID,A.USER_DATE,A.USER_BALANCE
+    </sql>
+
+    <sql id="IotUser_clean_column">
+
+    A.IOT_USER_ID,A.USER_NAME,A.USER_PASSWORD,A.USER_TOKEN,A.USER_EMAIL,A.USER_DISPLAY_NAME,A.USER_VALID,A.USER_DATE,A.USER_BALANCE
+    </sql>
+
+    <!-- 生成时选择的可能查询的条件 -->
+    <sql id="whereCondition">
+        <where>
+            <if test="remoteParameter != null and remoteParameter !=''">
+                ( A.IOT_USER_ID = #{remoteParameter}
+                OR A.USER_VALID = #{remoteParameter}
+                OR A.USER_NAME LIKE CONCAT('%',#{remoteParameter},'%')
+                OR A.USER_EMAIL LIKE CONCAT('%',#{remoteParameter},'%')
+                )
+            </if>
+            <if test="userNameLIK != null and userNameLIK !=''">
+                AND A.USER_NAME 	LIKE CONCAT('%',#{userNameLIK},'%')
+
+            </if>
+            <if test="userEmailLIK != null and userEmailLIK !=''">
+                AND A.USER_EMAIL 	LIKE CONCAT('%',#{userEmailLIK},'%')
+
+            </if>
+            <if test="iotUserId != null and iotUserId !=''">
+                AND A.IOT_USER_ID = #{iotUserId}
+            </if>
+            <if test="noIotUserId != null and noIotUserId !=''">
+                AND A.IOT_USER_ID != #{noIotUserId}
+            </if>
+            <if test="iotUserIds != null and iotUserIds !=''">
+                AND A.IOT_USER_ID in
+                <foreach item="item" index="index" collection="iotUserIds" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="noIotUserIds != null and noIotUserIds !=''">
+                AND A.IOT_USER_ID not in
+                <foreach item="item" index="index" collection="noIotUserIds" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="userName != null and userName !=''">
+                AND A.USER_NAME = #{userName}
+            </if>
+            <if test="noUserName != null and noUserName !=''">
+                AND A.USER_NAME != #{noUserName}
+            </if>
+            <if test="userNames != null and userNames !=''">
+                AND A.USER_NAME in
+                <foreach item="item" index="index" collection="userNames" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="noUserNames != null and noUserNames !=''">
+                AND A.USER_NAME not in
+                <foreach item="item" index="index" collection="noUserNames" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="userPassword != null and userPassword !=''">
+                AND A.USER_PASSWORD = #{userPassword}
+            </if>
+            <if test="noUserPassword != null and noUserPassword !=''">
+                AND A.USER_PASSWORD != #{noUserPassword}
+            </if>
+            <if test="userPasswords != null and userPasswords !=''">
+                AND A.USER_PASSWORD in
+                <foreach item="item" index="index" collection="userPasswords" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="noUserPasswords != null and noUserPasswords !=''">
+                AND A.USER_PASSWORD not in
+                <foreach item="item" index="index" collection="noUserPasswords" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="userToken != null and userToken !=''">
+                AND A.USER_TOKEN = #{userToken}
+            </if>
+            <if test="noUserToken != null and noUserToken !=''">
+                AND A.USER_TOKEN != #{noUserToken}
+            </if>
+            <if test="userTokens != null and userTokens !=''">
+                AND A.USER_TOKEN in
+                <foreach item="item" index="index" collection="userTokens" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="noUserTokens != null and noUserTokens !=''">
+                AND A.USER_TOKEN not in
+                <foreach item="item" index="index" collection="noUserTokens" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="userEmail != null and userEmail !=''">
+                AND A.USER_EMAIL = #{userEmail}
+            </if>
+            <if test="noUserEmail != null and noUserEmail !=''">
+                AND A.USER_EMAIL != #{noUserEmail}
+            </if>
+            <if test="userEmails != null and userEmails !=''">
+                AND A.USER_EMAIL in
+                <foreach item="item" index="index" collection="userEmails" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="noUserEmails != null and noUserEmails !=''">
+                AND A.USER_EMAIL not in
+                <foreach item="item" index="index" collection="noUserEmails" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="userDisplayName != null and userDisplayName !=''">
+                AND A.USER_DISPLAY_NAME = #{userDisplayName}
+            </if>
+            <if test="noUserDisplayName != null and noUserDisplayName !=''">
+                AND A.USER_DISPLAY_NAME != #{noUserDisplayName}
+            </if>
+            <if test="userDisplayNames != null and userDisplayNames !=''">
+                AND A.USER_DISPLAY_NAME in
+                <foreach item="item" index="index" collection="userDisplayNames" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="noUserDisplayNames != null and noUserDisplayNames !=''">
+                AND A.USER_DISPLAY_NAME not in
+                <foreach item="item" index="index" collection="noUserDisplayNames" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="userValid != null and userValid !=''">
+                AND A.USER_VALID = #{userValid}
+            </if>
+            <if test="noUserValid != null and noUserValid !=''">
+                AND A.USER_VALID != #{noUserValid}
+            </if>
+            <if test="userValids != null and userValids !=''">
+                AND A.USER_VALID in
+                <foreach item="item" index="index" collection="userValids" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="noUserValids != null and noUserValids !=''">
+                AND A.USER_VALID not in
+                <foreach item="item" index="index" collection="noUserValids" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="userDate != null and userDate !=''">
+                AND A.USER_DATE = #{userDate}
+            </if>
+            <if test="noUserDate != null and noUserDate !=''">
+                AND A.USER_DATE != #{noUserDate}
+            </if>
+            <if test="userDates != null and userDates !=''">
+                AND A.USER_DATE in
+                <foreach item="item" index="index" collection="userDates" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="noUserDates != null and noUserDates !=''">
+                AND A.USER_DATE not in
+                <foreach item="item" index="index" collection="noUserDates" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="userBalance != null and userBalance !=''">
+                AND A.USER_BALANCE = #{userBalance}
+            </if>
+            <if test="noUserBalance != null and noUserBalance !=''">
+                AND A.USER_BALANCE != #{noUserBalance}
+            </if>
+            <if test="userBalances != null and userBalances !=''">
+                AND A.USER_BALANCE in
+                <foreach item="item" index="index" collection="userBalances" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="noUserBalances != null and noUserBalances !=''">
+                AND A.USER_BALANCE not in
+                <foreach item="item" index="index" collection="noUserBalances" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        <if test="groupBy != null and groupBy !=''">
+            group by  ${groupBy}
+        </if>
+        <if test="orderBy != null and orderBy !=''">
+            order by  ${orderBy}
+        </if>
+    </sql>
+
+    <insert id="addIotUser" parameterType="org.totem.iot.model.IotUser">
+        insert into IOT_USER (
+            `IOT_USER_ID`,`USER_NAME`,`USER_PASSWORD`,`USER_TOKEN`,`USER_EMAIL`,`USER_DISPLAY_NAME`,`USER_VALID`,`USER_DATE`,`USER_BALANCE`
+        ) values (
+            #{iotUserId,	jdbcType=VARCHAR},#{userName,	jdbcType=VARCHAR},#{userPassword,	jdbcType=VARCHAR},#{userToken,	jdbcType=VARCHAR},#{userEmail,	jdbcType=VARCHAR},#{userDisplayName,	jdbcType=VARCHAR},#{userValid,	jdbcType=VARCHAR},#{userDate,	jdbcType=VARCHAR},#{userBalance,	jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="addIotUsers" useGeneratedKeys="true" parameterType="java.util.List">
+        insert into IOT_USER (
+            `IOT_USER_ID`,`USER_NAME`,`USER_PASSWORD`,`USER_TOKEN`,`USER_EMAIL`,`USER_DISPLAY_NAME`,`USER_VALID`,`USER_DATE`,`USER_BALANCE`
+        ) values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.iotUserId,	jdbcType=VARCHAR},#{item.userName,	jdbcType=VARCHAR},#{item.userPassword,	jdbcType=VARCHAR},#{item.userToken,	jdbcType=VARCHAR},#{item.userEmail,	jdbcType=VARCHAR},#{item.userDisplayName,	jdbcType=VARCHAR},#{item.userValid,	jdbcType=VARCHAR},#{item.userDate,	jdbcType=VARCHAR},#{item.userBalance,	jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+    <delete id="deleteIotUsers" parameterType="map">
+        delete A from IOT_USER A
+        <include refid="whereCondition"/>
+    </delete>
+
+    <delete id="deleteIotUser" parameterType="String">
+        delete from IOT_USER
+        where IOT_USER_ID =  #{iotUserId}
+    </delete>
+
+    <update id="updateIotUser" parameterType="org.totem.iot.model.IotUser">
+        update IOT_USER
+        <set>
+            <if test="userName != null">
+                `USER_NAME` = #{userName} ,
+            </if>
+            <if test="userPassword != null">
+                `USER_PASSWORD` = #{userPassword} ,
+            </if>
+            <if test="userToken != null">
+                `USER_TOKEN` = #{userToken} ,
+            </if>
+            <if test="userEmail != null">
+                `USER_EMAIL` = #{userEmail} ,
+            </if>
+            <if test="userDisplayName != null">
+                `USER_DISPLAY_NAME` = #{userDisplayName} ,
+            </if>
+            <if test="userValid != null">
+                `USER_VALID` = #{userValid} ,
+            </if>
+            <if test="userDate != null">
+                `USER_DATE` = #{userDate} ,
+            </if>
+            <if test="userBalance != null">
+                `USER_BALANCE` = #{userBalance}
+            </if>
+        </set>
+        where `IOT_USER_ID` =  #{iotUserId}
+    </update>
+
+    <select id="queryIotUsers" parameterType="Map" resultMap="iotUser">
+        select distinct <include refid="IotUser_column"/>
+        from IOT_USER A
+
+        <include refid="whereCondition"/>
+    </select>
+
+    <select id="queryByQueryStr" parameterType="java.lang.String" resultMap="iotUser">
+        select distinct <include refid="IotUser_clean_column"/>
+        from IOT_USER A
+        where ${_parameter}
+    </select>
+
+    <select id="getById" parameterType="String" resultMap="iotUser">
+        select <include refid="IotUser_column"/>
+        from IOT_USER A
+
+        where  A.IOT_USER_ID =  #{iotUserId}
+    </select>
+
+    <select id="getCounts" parameterType="Map" resultType="int">
+        select count(1) from IOT_USER A
+        <include refid="whereCondition"/>
+    </select>
+
+</mapper>

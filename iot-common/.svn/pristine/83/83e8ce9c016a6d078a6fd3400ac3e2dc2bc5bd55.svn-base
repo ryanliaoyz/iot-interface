@@ -1,0 +1,8 @@
+package org.totem.iot.utils;
+
+import org.springframework.context.annotation.Configuration;
+
+@Configuration("iotUtil")
+public class CommonsUtil extends org.totem.common.utils.CommonsUtil{
+    public static void main(String[] arg){}
+}

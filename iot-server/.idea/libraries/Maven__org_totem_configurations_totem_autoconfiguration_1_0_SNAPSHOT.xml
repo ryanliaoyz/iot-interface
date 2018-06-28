@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.totem.configurations:totem.autoconfiguration:1.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/totem/configurations/totem.autoconfiguration/1.0-SNAPSHOT/totem.autoconfiguration-1.0-20180628.060020-103.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/totem/configurations/totem.autoconfiguration/1.0-SNAPSHOT/totem.autoconfiguration-1.0-20180628.060020-103-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/totem/configurations/totem.autoconfiguration/1.0-SNAPSHOT/totem.autoconfiguration-1.0-20180628.060020-103-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
